@@ -1,8 +1,9 @@
 from board import Board
-from structures import Player
+from structures import Player, Direction
 
-board = Board(True, 5, Player.O)
+board = Board(True, 4, Player.O)
 board.initialize()
+board.draw_and_update(('A', 1, Direction.DL))
+board.draw_and_update(('A', 1, Direction.DD))
+board.draw_and_update(('B', 1, Direction.D))
 board.print()
-print(board.halfPoints)
-print(board.position_to_matrix('B1'))
