@@ -167,25 +167,14 @@ class Board:
 
 
 
-    def check_position(self, position: tuple):
-        if not isinstance(position, tuple) or len(position) != 3:
-            print("Pozicija mora imati 3 elementa: (slovo, broj, smer).")
+    def check_position(self, letter:str, number: int, direction: Direction):
+        if (
+        not isinstance(letter, str) or len(letter) != 1 or not letter.isupper() or
+        not isinstance(number, int) or number < 1 or
+        not isinstance(direction, Direction)):
+            print(f"Neispravni parametri pozicije: {letter}{number} {direction}")
             return False
 
-        letter, number, direction = position
-
-        if not isinstance(letter, str) or not letter.isupper() or len(letter) != 1:
-            print(f"Neispravno slovo: {letter}. Mora biti veliko slovo (A-Z).")
-            return False
-
-        if not isinstance(number, int):
-            print(f"Neispravan broj: {number}. Mora biti ceo broj.")
-            return False
-
-        if not isinstance(direction, Direction):
-            print(f"Neispravan smer: {direction}. Mora biti validan smer.")
-            return False
-        
         valid_letters = [chr(i) for i in range(ord('A'), ord('A') + 2*self.boardSize-1)]
         valid_numbers = range(1, 2*self.boardSize)
         letter_index = ord(letter) - ord('A')
@@ -207,12 +196,12 @@ class Board:
                 return False
 
         if direction == Direction.DD:
-            if not (letter_index < self.boardSize and number <= self.boardSize):
+            if not (letter_index < 2 * self.boardSize - 1 - 3 and number <= self.boardSize):
                 print(f"Ne smete koristiti DD za poziciju {letter}{number}.")
                 return False
 
         if direction == Direction.DL:
-            if not (letter_index < self.boardSize and number >= letter_index + 1):
+            if not (letter_index < 2 * self.boardSize - 1 - 3 and number >= letter_index + 1):
                 print(f"Ne smete koristiti DL za poziciju {letter}{number}.")
                 return False
         
@@ -221,15 +210,15 @@ class Board:
             
     
     # Postavka gumice na odredjenu poziciju
-    def draw_and_update(self, position: tuple):
+    # Vraca True ukoliko je potez uspesno odigran
+    def draw_and_update(self, letter:str, number: int, direction: Direction):
         if(self.gameFinished):
             print("Igra je zavrsena. Ne mozete odigrati potez.")
-            return
+            return False
 
-        if(not(self.check_position(position))):
-            return
+        if(not(self.check_position(letter, number, direction))):
+            return False
 
-        letter, number, direction = position
         row, col = self.position_to_matrix(f"{letter}{number}")
 
         if direction == Direction.D:
@@ -323,6 +312,8 @@ class Board:
                         + self.currentPlayer.value
                         + self.board[center_row][center_col + 1:]
                     )
+
+        return True
 
 
 

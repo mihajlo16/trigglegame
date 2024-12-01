@@ -1,5 +1,5 @@
 from board import Board
-from enums import Player
+from enums import Player, Direction
 from test import testGame
 
 def main():
@@ -7,7 +7,7 @@ def main():
         board = Board(True, 4, Player.O) #True - da li igra kompjuter, 4 - Velicina table, Player.O - Ko prvi igra
         board.initialize()
 
-        print("Inicijalno stanje:")
+        print("Inicijalno stanje:\n")
         board.print()
 
         testGame(board)
