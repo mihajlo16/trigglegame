@@ -1,5 +1,6 @@
 from structures import Player, Direction
 from itertools import combinations
+from enum import Enum
 
 class Board:
     def __init__(self, isComputerPlaying, boardSize, firstPlay: Player):
@@ -148,9 +149,44 @@ class Board:
                             "igracKojiJeZauzeo": Player.N,
                             "indeksUMatrici": (center_row, center_col)
                         }
+    
+    
 
-
+            
+        
     def draw_and_update(self, position: tuple):
+        def check_position(self, position:tuple):
+            letter, number, direction = position
+            valid_letters = [chr(i) for i in range(ord('A'), ord('A') + 2*self.boardSize-1)]
+            valid_numbers = range(1, 2*self.boardSize)
+            letter_index = ord(letter) - ord('A')
+            # Provera za letter
+            if letter not in valid_letters:
+                raise ValueError(f"Neispravno slovo: {letter}. Dozvoljeno: {valid_letters}.")
+
+            # Provera za number
+            if number not in valid_numbers:
+                raise ValueError(f"Neispravan broj: {number}. Dozvoljeno: {list(valid_numbers)}.")
+
+            # Provera za direction
+            if not isinstance(direction, Direction):
+                raise ValueError(f"Neispravan smer: {direction}. Dozvoljeno: {[d.value for d in Direction]}.")
+            
+            if(direction==Direction.D):
+                if (letter_index<self.boardSize and letter_index+1<number):
+                    raise ValueError(f"Ne smete koristiti D")
+                elif (letter_index>=self.boardSize and -(letter_index-2*self.boardSize+2)+1<number):
+                    raise ValueError(f"Ne smete koristiti D")
+                
+            if(direction==Direction.DD):
+                if (not(letter_index<self.boardSize and number<=self.boardSize)):
+                    raise ValueError(f"Ne smete koristiti DD")
+                
+            if(direction==Direction.DL):
+                if(not(letter_index<self.boardSize and number>=letter_index+1)):
+                    raise ValueError(f"Ne smete koristiti DL")
+                
+        check_position(self,position)
         """
         Crta gumice, postavlja stanje za grane i ažurira zauzete trouglove.
 
@@ -188,7 +224,7 @@ class Board:
         else:
             raise ValueError("Neispravan smer! Dozvoljeni smerovi su 'D', 'DL', 'DD'.")
         
-
+        edge_ids=[]
         # Postavi grane na zauzeto i nacrtaj na tabli
         for edge in edges:
             # Pronađi ID grane i postavi stanje na zauzeto
@@ -199,10 +235,10 @@ class Board:
                     break
             if edge_id is not None:
                 self.branchState[edge_id]['isOccupied'] = True
+                edge_ids.append(edge_id)
             else:
                 raise ValueError(f"Grana {edge} nije pronađena!")
-            
-            
+                        
 
             if char == "-":  # Desno
                 self.board[row] = (
@@ -213,7 +249,7 @@ class Board:
                 col = col + 6
             elif char == "\\":  # Dole-desno
                 self.board[row + 1] = (
-                    self.board[row + 1][:col + 1]
+                    self.board[row + 1][:col+1]
                     + "\\"
                     + self.board[row + 1][col + 2:]
                 )
@@ -227,37 +263,43 @@ class Board:
 
             elif char == "/":  # Dole-levo
                 self.board[row + 1] = (
-                    self.board[row + 1][:col - 1]
+                    self.board[row + 1][:col-1]
                     + "/"
-                    + self.board[row + 1][col - 2:]
+                    + self.board[row + 1][col:]
                 )
                 self.board[row + 2] = (
                     self.board[row + 2][:col - 2]
                     + "/"
-                    + self.board[row + 2][col - 3:]
+                    + self.board[row + 2][col - 1:]
                 )
                 col = col - 3
                 row = row + 3
 
         # Proveri da li su trouglovi zauzeti i ažuriraj
         # Proveri da li su trouglovi zauzeti i ažuriraj
-        print(edge_id)
-        for triangle_key, triangle_data in self.triggleState.items():
-            print(f"Proveravam trougao: {triangle_key}")
-            if edge_id in triangle_key:  # Proveri da li edge_id pripada trouglu
-                # Proveri da li su sve grane trougla zauzete
-                if all(self.branchState[branch_id]['isOccupied'] for branch_id in triangle_key):
-                    # Postavi zauzeće trougla
-                    if triangle_data["igracKojiJeZauzeo"] == Player.N:
-                        print(f"Trougao zauzet: {triangle_key}")
-                        triangle_data["igracKojiJeZauzeo"] = self.currentPlayer
-                        center_row, center_col = triangle_data["indeksUMatrici"]
+        for triangle_key, triangle_data in self.triggleState.items():            
+            # Proveri da li su sve grane trougla zauzete
+            grane_trougla = [self.branchState[branch_id]['isOccupied'] for branch_id in triangle_key]
+            
+            if all(grane_trougla):  # Ako su sve grane zauzete
 
-                        # Nacrtaj trougao
-                        self.board[center_row] = (
-                            self.board[center_row][:center_col]
-                            + self.currentPlayer.value
-                            + self.board[center_row][center_col + 1:]
-                        )
+                if triangle_data["igracKojiJeZauzeo"] == Player.N:
+                    # Postavljanje zauzeća
+                    triangle_data["igracKojiJeZauzeo"] = self.currentPlayer
+                    if(self.currentPlayer==Player.O):
+                        self.oPoints=self.oPoints+1
+                    else:
+                        self.xPoints+=1
+                    center_row, center_col = triangle_data["indeksUMatrici"]
+
+                    # Nacrtaj trougao
+                    self.board[center_row] = (
+                        self.board[center_row][:center_col]
+                        + self.currentPlayer.value
+                        + self.board[center_row][center_col + 1:]
+                    )
+
+
+
 
 
