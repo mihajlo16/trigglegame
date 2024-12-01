@@ -3,7 +3,7 @@ from board import Board
 
 def testRound(board: Board, letter:str, number: int, direction: Direction):
     if(board.draw_and_update(letter, number, direction)):
-        print(f"Igrac {board.currentPlayer} je odigrao potez {letter}{number} {direction.name}")
+        print(f"Igrac {board.currentPlayer.name} je odigrao potez {letter}{number} {direction.name}")
         board.check_win()
         if board.currentPlayer == Player.X:
             board.currentPlayer = Player.O

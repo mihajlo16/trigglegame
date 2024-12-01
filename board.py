@@ -57,10 +57,10 @@ class Board:
     # Provera da li je igra gotova
     def check_win(self):
         if self.oPoints > self.halfPoints:
-            print(f"Pobedio je igrac {Player.O}!")
+            print(f"Pobedio je igrac {Player.O.name}!")
             self.gameFinished = True
         elif self.xPoints > self.halfPoints:
-            print(f"Pobedio je igrac {Player.X}!")
+            print(f"Pobedio je igrac {Player.X.name}!")
             self.gameFinished = True
         elif self.oPoints == self.halfPoints and self.xPoints == self.halfPoints:
             print("Rezultat je neresen!")
@@ -172,7 +172,7 @@ class Board:
         not isinstance(letter, str) or len(letter) != 1 or not letter.isupper() or
         not isinstance(number, int) or number < 1 or
         not isinstance(direction, Direction)):
-            print(f"Neispravni parametri pozicije: {letter}{number} {direction}")
+            print(f"Neispravni parametri pozicije: {letter}{number} {direction.name}")
             return False
 
         valid_letters = [chr(i) for i in range(ord('A'), ord('A') + 2*self.boardSize-1)]
