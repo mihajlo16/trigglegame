@@ -2,8 +2,8 @@ from enums import Player, Direction
 from board import Board
 
 def testRound(board: Board, position: tuple):
-    board.draw_and_update(position)
     print(f"Igrac {board.currentPlayer} je odigrao potez {position}")
+    board.draw_and_update(position)
     board.check_win()
     if board.currentPlayer == Player.X:
         board.currentPlayer = Player.O

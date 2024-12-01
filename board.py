@@ -166,42 +166,57 @@ class Board:
                         }
 
 
-    # Provera validnosti unosa pozicije
+
     def check_position(self, position: tuple):
+        if not isinstance(position, tuple) or len(position) != 3:
+            print("Pozicija mora imati 3 elementa: (slovo, broj, smer).")
+            return False
+
         letter, number, direction = position
+
+        if not isinstance(letter, str) or not letter.isupper() or len(letter) != 1:
+            print(f"Neispravno slovo: {letter}. Mora biti veliko slovo (A-Z).")
+            return False
+
+        if not isinstance(number, int):
+            print(f"Neispravan broj: {number}. Mora biti ceo broj.")
+            return False
+
+        if not isinstance(direction, Direction):
+            print(f"Neispravan smer: {direction}. Mora biti validan smer.")
+            return False
+        
         valid_letters = [chr(i) for i in range(ord('A'), ord('A') + 2*self.boardSize-1)]
         valid_numbers = range(1, 2*self.boardSize)
         letter_index = ord(letter) - ord('A')
         
         if letter not in valid_letters:
             print(f"Neispravno slovo: {letter}. Dozvoljeno: {valid_letters}.")
-            return
+            return False
 
         if number not in valid_numbers:
             print(f"Neispravan broj: {number}. Dozvoljeno: {list(valid_numbers)}.")
-            return
-
-        if not isinstance(direction, Direction):
-            print(f"Neispravan smer: {direction}. Dozvoljeno: {[d.value for d in Direction]}.")
-            return
+            return False
         
         if direction == Direction.D:
             if letter_index < self.boardSize and letter_index + 1 < number:
-                print("Ne smete koristiti D.")
-                return
+                print(f"Ne smete koristiti D za poziciju {letter}{number}.")
+                return False
             elif letter_index >= self.boardSize and -(letter_index - 2*self.boardSize + 2) + 1 < number:
-                print("Ne smete koristiti D.")
-                return
+                print(f"Ne smete koristiti D za poziciju {letter}{number}.")
+                return False
 
         if direction == Direction.DD:
             if not (letter_index < self.boardSize and number <= self.boardSize):
-                print("Ne smete koristiti DD.")
-                return
+                print(f"Ne smete koristiti DD za poziciju {letter}{number}.")
+                return False
 
         if direction == Direction.DL:
             if not (letter_index < self.boardSize and number >= letter_index + 1):
-                print("Ne smete koristiti DL.")
-                return
+                print(f"Ne smete koristiti DL za poziciju {letter}{number}.")
+                return False
+        
+        return True
 
             
     
@@ -211,7 +226,8 @@ class Board:
             print("Igra je zavrsena. Ne mozete odigrati potez.")
             return
 
-        self.check_position(position)
+        if(not(self.check_position(position))):
+            return
 
         letter, number, direction = position
         row, col = self.position_to_matrix(f"{letter}{number}")
