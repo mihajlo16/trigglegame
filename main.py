@@ -1,22 +1,12 @@
-from board import Board
-from enums import Player, Direction
-from test import testGame
+from game import Game
+from enums import Player
 
 def main():
-    try:
-        board = Board(True, 4, Player.O) #True - da li igra kompjuter, 4 - Velicina table, Player.O - Ko prvi igra
-        board.initialize()
-
-        print("Inicijalno stanje:\n")
-        board.print()
-
-        testGame(board)
-
-        board.print()
-        print(f"Poeni igraca X: {board.xPoints}")
-        print(f"Poeni igraca O: {board.oPoints}")
-    except Exception as e:
-        print(f"Greška: {e}")
+    #try:
+        game = Game(True, 4, Player.O) #True - da li igra kompjuter, 4 - Velicina table, Player.O - Ko prvi igra
+        game.startGame()
+    #except Exception as e:
+    #    print(f"Greška: {e}")
 
 if __name__ == "__main__":
     main()

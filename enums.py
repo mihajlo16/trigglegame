@@ -6,6 +6,6 @@ class Player(Enum):
     O = "O"
 
 class Direction(Enum):
-    D = "Desno"
-    DD = "DoleDesno"
-    DL = "DoleLevo"
+    D = "D"
+    DD = "DD"
+    DL = "DL"
