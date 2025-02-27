@@ -141,23 +141,23 @@ class Board:
 
 
 
-def check_position(board, boardSize, letter:str, number: int, direction: Direction):
+def check_position(board, boardSize, letter:str, number: int, direction: Direction, printMsg: bool):
     if (
         not isinstance(letter, str) or len(letter) != 1 or not letter.isupper() or
         not isinstance(number, int) or number < 1 or
         not isinstance(direction, Direction)):
-        print(f"Neispravni parametri pozicije: {letter}{number} {direction}")
+        if printMsg: print(f"Neispravni parametri pozicije: {letter}{number} {direction}")
         return False
     
     valid_numbers = get_valid_numbers(boardSize, letter)
     valid_letters = [chr(i) for i in range(ord('A'), ord('A') + 2*boardSize-1)]
     
     if letter not in valid_letters:
-        print(f"Neispravno slovo: {letter}. Dozvoljeno: {valid_letters}.")
+        if printMsg: print(f"Neispravno slovo: {letter}. Dozvoljeno: {valid_letters}.")
         return False
 
     if number not in valid_numbers:
-        print(f"Neispravan broj: {number}. Dozvoljeno: {list(valid_numbers)}.")
+        if printMsg: print(f"Neispravan broj: {number}. Dozvoljeno: {list(valid_numbers)}.")
         return False
 
     realBoardHeight = len(board)
@@ -167,34 +167,34 @@ def check_position(board, boardSize, letter:str, number: int, direction: Directi
 
     if direction == Direction.D:
         if col + 18 >= realBoardWidth:
-            print(f"Ne smete koristiti D za poziciju {letter}{number}.")
+            if printMsg: print(f"Ne smete koristiti D za poziciju {letter}{number}.")
             return False
         if board[row][col+18] != '*':
-            print(f"Ne smete koristiti D za poziciju {letter}{number}.")
+            if printMsg: print(f"Ne smete koristiti D za poziciju {letter}{number}.")
             return False
 
     if direction == Direction.DD:
         if col + 9 >= realBoardWidth or row + 9 >= realBoardHeight:
-            print(f"Ne smete koristiti DD za poziciju {letter}{number}.")
+            if printMsg: print(f"Ne smete koristiti DD za poziciju {letter}{number}.")
             return False
         if board[row+9][col+9] != '*':
-            print(f"Ne smete koristiti D za poziciju {letter}{number}.")
+            if printMsg: print(f"Ne smete koristiti D za poziciju {letter}{number}.")
             return False
 
     if direction == Direction.DL:
         if col - 9 < 0 or col - 9 >= realBoardWidth or row + 9 >= realBoardHeight:
-            print(f"Ne smete koristiti DL za poziciju {letter}{number}.")
+            if printMsg: print(f"Ne smete koristiti DL za poziciju {letter}{number}.")
             return False
         if board[row+9][col-9] != '*':
-            print(f"Ne smete koristiti D za poziciju {letter}{number}.")
+            if printMsg: print(f"Ne smete koristiti D za poziciju {letter}{number}.")
             return False
     
     return True
     
 # Postavka gumice na odredjenu poziciju
 # Vraca True ukoliko je potez uspesno odigran
-def draw_and_update(board: list, boardSize: int, branch_state: dict, triggle_state: dict, current_player: Player, letter: str, number: int, direction: Direction):
-    if not check_position(board, boardSize,letter, number, direction):
+def draw_and_update(board: list, boardSize: int, branch_state: dict, triggle_state: dict, current_player: Player, letter: str, number: int, direction: Direction, printMsg: bool):
+    if not check_position(board, boardSize,letter, number, direction, printMsg):
         return (0, 0, False)
 
     row, col = position_to_matrix(boardSize, f"{letter}{number}")
