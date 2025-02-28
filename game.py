@@ -18,7 +18,7 @@ class Game:
                 if inpt in self.inputHistory:
                     print(f'Potez {inpt} je vec odigran.')
                     break
-                xPointsAdded, oPointsAdded, updateSuccessful = draw_and_update(self.board.board,self.board.boardSize ,self.board.branchState, self.board.triggleState, self.board.currentPlayer,letter, number, direction)
+                xPointsAdded, oPointsAdded, updateSuccessful = draw_and_update(self.board.board,self.board.boardSize ,self.board.branchState, self.board.triggleState, self.board.currentPlayer,letter, number, direction, True)
                 self.board.xPoints += xPointsAdded
                 self.board.oPoints += oPointsAdded
                 if(updateSuccessful):

@@ -236,16 +236,17 @@ def draw_and_update(board: list, boardSize: int, branch_state: dict, triggle_sta
             col = col - 3
             row = row + 3
             
-    triangle_data, xPoints, oPoints = update_state(edges, branch_state, triggle_state, current_player)
-            
-    center_row, center_col = triangle_data
+    triangles, xPoints, oPoints = update_state(edges, branch_state, triggle_state, current_player)
     
-    if center_row is not -1 and center_col is not -1:
-        board[center_row] = (
-            board[center_row][:center_col]
-            + current_player.value
-            + board[center_row][center_col + 1:]
-        )
+    for triangle_data in triangles:  
+        center_row, center_col = triangle_data
+        
+        if center_row is not -1 and center_col is not -1:
+            board[center_row] = (
+                board[center_row][:center_col]
+                + current_player.value
+                + board[center_row][center_col + 1:]
+            )
 
     return (xPoints, oPoints, True)
 
@@ -255,6 +256,7 @@ def update_state(edges: list, branch_state: dict, triggle_state: dict, current_p
     oPoints = 0
     
     edge_ids = []
+    triagles = []
     for edge in edges:
         edge_id = None
         for branch_id, branch_data in branch_state.items():
@@ -279,9 +281,9 @@ def update_state(edges: list, branch_state: dict, triggle_state: dict, current_p
                         oPoints+=1
                     else:
                         xPoints+=1
-                    return (triangle_data["indeksUMatrici"], xPoints, oPoints)
+                    triagles.append(triangle_data["indeksUMatrici"])
     
-    return ((-1,-1), xPoints, oPoints)
+    return (triagles, xPoints, oPoints)
 
 
 # Prevod pozicije na tabli u indeks matrice
