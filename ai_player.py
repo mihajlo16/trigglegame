@@ -5,7 +5,7 @@ from board import draw_and_update
 import math
 
 class AIPlayer:
-    def __init__(self, max_depth=2):
+    def __init__(self, max_depth):
         self.max_depth = max_depth
 
     def choose_best_move(self, game):

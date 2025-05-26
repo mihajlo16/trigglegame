@@ -5,11 +5,11 @@ from copy import deepcopy
 from ai_player import AIPlayer
 
 class Game:
-    def __init__(self, isComputerPlaying: bool, boardSize: int, firstPlay: Player):
+    def __init__(self, isComputerPlaying: bool, boardSize: int, firstPlay: Player, max_depth = 2):
         self.board = Board(isComputerPlaying, boardSize, firstPlay)
         self.board.initialize()
         self.inputHistory = []
-        self.ai = AIPlayer(max_depth=2)
+        self.ai = AIPlayer(max_depth)
 
     def startGame(self):
         self.board.print()
