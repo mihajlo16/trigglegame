@@ -141,7 +141,7 @@ class Board:
 
 
 
-def check_position(board, boardSize, letter:str, number: int, direction: Direction, printMsg: bool):
+def check_position(board, boardSize, letter, number, direction, printMsg = False):
     if (
         not isinstance(letter, str) or len(letter) != 1 or not letter.isupper() or
         not isinstance(number, int) or number < 1 or
@@ -241,7 +241,7 @@ def draw_and_update(board: list, boardSize: int, branch_state: dict, triggle_sta
     for triangle_data in triangles:  
         center_row, center_col = triangle_data
         
-        if center_row is not -1 and center_col is not -1:
+        if center_row != -1 and center_col != -1:
             board[center_row] = (
                 board[center_row][:center_col]
                 + current_player.value
