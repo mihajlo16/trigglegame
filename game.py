@@ -3,6 +3,7 @@ from board import Board, draw_and_update, check_position, update_state, get_edge
 from enums import Player, Direction
 from copy import deepcopy
 from ai_player import AIPlayer
+import os
 
 class Game:
     def __init__(self, isComputerPlaying: bool, boardSize: int, firstPlay: Player, max_depth = 2):
@@ -44,9 +45,10 @@ class Game:
                 self.board.xPoints += xPointsAdded
                 self.board.oPoints += oPointsAdded
                 if updateSuccessful:
+                    clear_console()
                     self.inputHistory.append(best_move)
                     played = True
-                    print(f"Igrac {self.board.currentPlayer.name} je odigrao potez {letter}{number} {direction.name}.")
+                    print(f"Igrac {self.board.currentPlayer.name} je odigrao potez {letter}{number} {direction.name}.\n\n")
                     self.board.check_win()
                     self.board.print()
                     if self.board.currentPlayer == Player.X:
@@ -98,3 +100,6 @@ class Game:
             return (letter, number, direction)
         except:
             return None, 0, 0
+
+def clear_console():
+    os.system('cls' if os.name == 'nt' else 'clear')
