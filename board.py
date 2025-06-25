@@ -20,6 +20,7 @@ class Board:
     @property
     def currentPlayer(self):
         return self._currentPlayer
+    
 
     @currentPlayer.setter
     def currentPlayer(self, value: Player):
@@ -139,9 +140,20 @@ class Board:
                             "indeksUMatrici": (center_row, center_col)
                         }
 
+        
+def sve_grane_iz_poteza_zauzete(edges, branchState: dict):
+    for edge in edges:
+        nadjena = False
+        for branch_data in branchState.values():
+            if set(branch_data["edge"]) == set(edge) and branch_data["isOccupied"]:
+                nadjena = True
+                break
+        if not nadjena:
+            return False
+    return True
 
 
-def check_position(board, boardSize, letter, number, direction, printMsg = False):
+def check_position(board, boardSize, letter, number, direction, branchState: dict, printMsg = False):
     if (
         not isinstance(letter, str) or len(letter) != 1 or not letter.isupper() or
         not isinstance(number, int) or number < 1 or
@@ -188,13 +200,20 @@ def check_position(board, boardSize, letter, number, direction, printMsg = False
         if board[row+9][col-9] != '*':
             if printMsg: print(f"Ne smete koristiti DL za poziciju {letter}{number}.")
             return False
-    
+        
+    edges, _ = get_edges(row, col, direction, boardSize)
+
+    if sve_grane_iz_poteza_zauzete(edges, branchState):
+        if printMsg:
+            print("Nije dozvoljeno: sve grane koje bi bile postavljene su već zauzete.")
+        return False
+
     return True
     
 # Postavka gumice na odredjenu poziciju
 # Vraca True ukoliko je potez uspesno odigran
 def draw_and_update(board: list, boardSize: int, branch_state: dict, triggle_state: dict, current_player: Player, letter: str, number: int, direction: Direction, printMsg: bool):
-    if not check_position(board, boardSize,letter, number, direction, printMsg):
+    if not check_position(board, boardSize,letter, number, direction, branch_state, printMsg):
         return (0, 0, False)
 
     row, col = position_to_matrix(boardSize, f"{letter}{number}")

@@ -67,7 +67,7 @@ class Game:
         for i in range(0, len(valid_letters)):
             for j in range(0, len(valid_numbers)):
                 for k in range(0,3):
-                    if check_position(self.board.board, self.board.boardSize, valid_letters[i], valid_numbers[j], valid_directions[k]):
+                    if check_position(self.board.board, self.board.boardSize, valid_letters[i], valid_numbers[j], valid_directions[k], self.board.branchState):
                         position = f"{valid_letters[i]}{valid_numbers[j]} {valid_directions[k].value}"
                         if position not in self.inputHistory:
                             available_moves.append(position)
