@@ -178,7 +178,7 @@ def check_position(board, boardSize, letter, number, direction, printMsg = False
             if printMsg: print(f"Ne smete koristiti DD za poziciju {letter}{number}.")
             return False
         if board[row+9][col+9] != '*':
-            if printMsg: print(f"Ne smete koristiti D za poziciju {letter}{number}.")
+            if printMsg: print(f"Ne smete koristiti DD za poziciju {letter}{number}.")
             return False
 
     if direction == Direction.DL:
@@ -186,7 +186,7 @@ def check_position(board, boardSize, letter, number, direction, printMsg = False
             if printMsg: print(f"Ne smete koristiti DL za poziciju {letter}{number}.")
             return False
         if board[row+9][col-9] != '*':
-            if printMsg: print(f"Ne smete koristiti D za poziciju {letter}{number}.")
+            if printMsg: print(f"Ne smete koristiti DL za poziciju {letter}{number}.")
             return False
     
     return True
